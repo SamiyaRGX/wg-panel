@@ -1,0 +1,2 @@
+# wg-panel
+Wireguard panel
