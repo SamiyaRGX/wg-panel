@@ -1,0 +1,255 @@
+<!-- <!DOCTYPE html> -->
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <title>پنل WireGuard و DNS — نسخه ۲۰ کشور</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body{margin:0;font-family:sans-serif;background:#141414;color:#fff;padding:20px}
+    .app{max-width:960px;margin:auto}
+    .tabs{display:flex;gap:10px;justify-content:center;margin-bottom:20px;flex-wrap:wrap}
+    .tab{padding:8px 16px;background:#333;border-radius:20px;cursor:pointer}
+    .tab.active{background:#ff8c00}
+    .container{background:#1e1e1e;padding:16px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.5)}
+    h1{margin-top:0;font-size:20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    label{display:block;margin:6px 0}
+    input,select,textarea,button{width:100%;padding:8px;border-radius:8px;border:1px solid #444;background:#222;color:#fff}
+    button{cursor:pointer}
+    button:hover{background:#444}
+    textarea{height:140px}
+    .note{font-size:13px;opacity:.7;margin-top:8px}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:grid;place-items:center}
+    .card{background:#222;padding:20px;border-radius:12px;max-width:340px;width:100%}
+    .error{color:#f55;font-size:14px;min-height:18px;margin-bottom:6px}
+    #logoutBtn{display:none;float:left;margin-bottom:12px;padding:6px 12px;background:#333;border-radius:8px;text-decoration:none;color:#fff}
+    #logoutBtn:hover{background:#555}
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <a href="#" id="logoutBtn">خروج</a>
+
+  <div class="tabs">
+    <div class="tab active" id="wireguardTab">پنل WireGuard</div>
+    <div class="tab" id="dnsTab">پنل DNS</div>
+  </div>
+
+  <!-- WireGuard -->
+  <div class="container" id="wireguardPanel">
+    <h1>تولید تنظیمات WireGuard</h1>
+    <div class="grid">
+      <div>
+        <label>انتخاب کشور</label>
+        <select id="country">
+          <option value="emirates">🇦🇪 Emirates</option>
+          <option value="turkey">🇹🇷 Turkey</option>
+          <option value="qatar">🇶🇦 Qatar</option>
+          <option value="germany">🇩🇪 Germany</option>
+          <option value="netherlands">🇳🇱 Netherlands</option>
+          <option value="singapore">🇸🇬 Singapore</option>
+          <option value="switzerland">🇨🇭 Switzerland</option>
+          <option value="sweden">🇸🇪 Sweden</option>
+          <option value="finland">🇫🇮 Finland</option>
+          <option value="norway">🇳🇴 Norway</option>
+          <option value="denmark">🇩🇰 Denmark</option>
+          <option value="poland">🇵🇱 Poland</option>
+          <option value="italy">🇮🇹 Italy</option>
+          <option value="spain">🇪🇸 Spain</option>
+          <option value="france">🇫🇷 France</option>
+          <option value="uk">🇬🇧 UK</option>
+          <option value="usa">🇺🇸 USA</option>
+          <option value="canada">🇨🇦 Canada</option>
+          <option value="japan">🇯🇵 Japan</option>
+          <option value="south_korea">🇰🇷 South Korea</option>
+        </select>
+      </div>
+      <div>
+        <label>انتخاب آی‌پی‌وی</label>
+        <select id="ip_version">
+          <option value="ipv4">IPv4</option>
+          <option value="ipv6">IPv6</option>
+          <option value="both" selected>هر دو</option>
+        </select>
+      </div>
+      <div>
+        <label>سیم‌کارت</label>
+        <select id="sim_card">
+          <option value="hmrah_eol">همراه اول</option>
+          <option value="Irancell">ایرانسل</option>
+        </select>
+      </div>
+      <div>
+        <label>نام فایل پیکربندی</label>
+        <input id="configName" placeholder="مثلاً mywg">
+      </div>
+    </div>
+    <div style="margin:12px 0;text-align:center">
+      <button id="generateButton">تولید پیکربندی</button>
+      <button id="saveButton">ذخیره فایل</button>
+    </div>
+    <textarea id="configText" readonly></textarea>
+    <div class="note">برای مودم های adsl از همراه اول استفاده کنید.</div>
+  </div>
+  <!-- DNS -->
+  <div class="container" id="dnsPanel" style="display:none;margin-top:16px">
+    <h1>پنل DNS کشورها</h1>
+    <div class="grid">
+      <div>
+        <label>انتخاب کشور</label>
+        <select id="dnsCountry">
+          <option value="emirates">🇦🇪 Emirates</option>
+          <option value="turkey">🇹🇷 Turkey</option>
+          <option value="qatar">🇶🇦 Qatar</option>
+          <option value="germany">🇩🇪 Germany</option>
+          <option value="netherlands">🇳🇱 Netherlands</option>
+          <option value="singapore">🇸🇬 Singapore</option>
+          <option value="switzerland">🇨🇭 Switzerland</option>
+          <option value="sweden">🇸🇪 Sweden</option>
+          <option value="finland">🇫🇮 Finland</option>
+          <option value="norway">🇳🇴 Norway</option>
+          <option value="denmark">🇩🇰 Denmark</option>
+          <option value="poland">🇵🇱 Poland</option>
+          <option value="italy">🇮🇹 Italy</option>
+          <option value="spain">🇪🇸 Spain</option>
+          <option value="france">🇫🇷 France</option>
+          <option value="uk">🇬🇧 UK</option>
+          <option value="usa">🇺🇸 USA</option>
+          <option value="canada">🇨🇦 Canada</option>
+          <option value="japan">🇯🇵 Japan</option>
+          <option value="south_korea">🇰🇷 South Korea</option>
+        </select>
+      </div>
+      <div>
+        <label>نسخه آی‌پی</label>
+        <select id="dnsIpVersion">
+          <option value="ipv4">IPv4</option>
+          <option value="ipv6">IPv6</option>
+          <option value="both">هر دو</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin:12px 0;text-align:center">
+      <button id="generateDNSButton">نمایش DNS</button>
+      <button id="copyDNSButton">کپی DNS</button>
+    </div>
+    <textarea id="dnsText" readonly></textarea>
+    <div id="copyMessage" class="note"></div>
+  </div>
+
+</div>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="card">
+    <h2>ورود</h2>
+    <div class="error" id="loginError"></div>
+    <label>نام کاربری</label>
+    <input id="loginUser">
+    <label>رمز عبور</label>
+    <input id="loginPass" type="password">
+    <button id="loginBtn" style="margin-top:10px">ورود</button>
+    <div class="note">ساخته شده با <b>قلب</b> توسط <b>Hexagon</b></div>
+  </div>
+</div>
+
+<script>
+/* Login */
+(function(){
+  const U="admin",P="12345678";
+  const modal=document.getElementById('loginModal');
+  function check(){ if(localStorage.getItem("ok")==="1"){modal.style.display="none";document.getElementById("logoutBtn").style.display="inline-block"} }
+  check();
+  document.getElementById("loginBtn").onclick=function(){
+    let u=document.getElementById("loginUser").value;
+    let p=document.getElementById("loginPass").value;
+    if(u===U && p===P){localStorage.setItem("ok","1");modal.style.display="none";location.reload();}
+    else document.getElementById("loginError").textContent="اطلاعات نادرست!";
+  }
+  document.getElementById("logoutBtn").onclick=function(e){e.preventDefault();localStorage.removeItem("ok");location.reload();}
+})();
+
+/* Tabs */
+document.getElementById("wireguardTab").onclick=function(){
+  this.classList.add("active");document.getElementById("dnsTab").classList.remove("active");
+  document.getElementById("wireguardPanel").style.display="block";
+  document.getElementById("dnsPanel").style.display="none";
+};
+document.getElementById("dnsTab").onclick=function(){
+  this.classList.add("active");document.getElementById("wireguardTab").classList.remove("active");
+  document.getElementById("dnsPanel").style.display="block";
+  document.getElementById("wireguardPanel").style.display="none";
+};
+
+/* Random IP helpers */
+function r(min,max){return Math.floor(Math.random()*(max-min+1))+min}
+function r4(p){return p+r(0,255)+"."+r(0,255)}
+function r6(p){function h(){return r(0,65535).toString(16)};return p+h()+":"+h()+":"+h()}
+
+/* Prefix maps */
+const ipv4Prefixes={
+  emirates:"217.199.",turkey:"78.189.",qatar:"37.205.",germany:"185.21.",
+  netherlands:"213.108.",singapore:"103.117.",switzerland:"185.117.",sweden:"185.76.",
+  finland:"185.199.",norway:"185.126.",denmark:"185.60.",poland:"185.25.",
+  italy:"185.51.",spain:"185.86.",france:"51.75.",uk:"185.128.",
+  usa:"104.27.",canada:"192.99.",japan:"133.242.",south_korea:"175.126."
+};
+const ipv6Prefixes={
+  emirates:"2a01:4f8:1c1c::",turkey:"2a01:4f8:1c1c::",qatar:"2a01:4f8:1c1c::",germany:"2a01:4f8:1c1c::",
+  netherlands:"2a00:7b80::",singapore:"2400:8500::",switzerland:"2a02:c207::",sweden:"2a02:0750::",
+  finland:"2a00:14b0::",norway:"2a01:5b40::",denmark:"2a02:0fe0::",poland:"2a02:25a0::",
+  italy:"2a00:11c0::",spain:"2a02:26f0::",france:"2a01:4f8:1c1c::",uk:"2a00:1098::",
+  usa:"2600:3c01::",canada:"2600:3c01::",japan:"2400:8500::",south_korea:"2400:da00::"
+};
+
+/* Generate WG config */
+function randKey(){let arr=new Uint8Array(32);crypto.getRandomValues(arr);let s='';arr.forEach(b=>s+=String.fromCharCode(b));return btoa(s)}
+function wgconf(cn,ipver,sim){
+  let priv=randKey(),pub=randKey(),psk=randKey();
+  let v4=ipv4Prefixes[cn],v6=ipv6Prefixes[cn];
+  let addr4=ipver!=="ipv6"?r4(v4):"",addr6=ipver!=="ipv4"?r6(v6):"";
+  let address=ipver==="ipv4"?addr4+"/24":ipver==="ipv6"?addr6+"/64":addr4+"/24, "+addr6+"/64";
+  let endpoint=r4(v4)+":51820";
+  let dns=sim==="hmrah_eol"?"10.202.10.10":"78.157.42.100";
+  return `[Interface]
+PrivateKey = ${priv}
+Address = ${address}
+DNS = ${dns}
+MTU = 1280
+
+[Peer]
+PublicKey = ${pub}
+PresharedKey = ${psk}
+Endpoint = ${endpoint}`;
+}
+document.getElementById("generateButton").onclick=function(){
+  if(localStorage.getItem("ok")!=="1"){alert("اول وارد شوید");return}
+  let cn=document.getElementById("country").value;
+  let ip=document.getElementById("ip_version").value;
+  let sim=document.getElementById("sim_card").value;
+  document.getElementById("configText").value=wgconf(cn,ip,sim);
+}
+document.getElementById("saveButton").onclick=function(){
+  let txt=document.getElementById("configText").value;
+  if(!txt.trim()){alert("هیچ پیکربندی‌ای نیست");return}
+  let name=(document.getElementById("configName").value||"wg")+".conf";
+  let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt]));a.download=name;a.click();
+}
+
+/* DNS */
+document.getElementById("generateDNSButton").onclick=function(){
+  if(localStorage.getItem("ok")!=="1"){alert("اول وارد شوید");return}
+  let c=document.getElementById("dnsCountry").value,v=document.getElementById("dnsIpVersion").value;
+  let out="";
+  if(v==="ipv4"||v==="both") out+=r4(ipv4Prefixes[c])+"\n";
+  if(v==="ipv6"||v==="both") out+=r6(ipv6Prefixes[c])+"\n";
+  document.getElementById("dnsText").value=out;
+}
+document.getElementById("copyDNSButton").onclick=function(){
+  let t=document.getElementById("dnsText").value;
+  navigator.clipboard.writeText(t).then(()=>{document.getElementById("copyMessage").textContent="کپی شد!"})
+}
+</script>
+</body>
+</html>
